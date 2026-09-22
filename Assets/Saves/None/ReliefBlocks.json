@@ -1,0 +1,178 @@
+[
+    {
+        "x": 137,
+        "y": 128,
+        "name": "sand_1",
+        "team": "PlayerTeam",
+        "exists": true,
+        "states": {
+            "type": "Block",
+            "z": 11,
+            "hardness": -1,
+            "mining_type": "sand",
+            "centered": true,
+            "relief": true
+        },
+        "type": "Block",
+        "centered": true,
+        "_hp": -1,
+        "temperature": 20,
+        "size": [
+            2,
+            2
+        ]
+    },
+    {
+        "x": 138,
+        "y": 128,
+        "name": "sand_1",
+        "team": "PlayerTeam",
+        "exists": true,
+        "states": {
+            "type": "Block",
+            "z": 11,
+            "hardness": -1,
+            "mining_type": "sand",
+            "centered": true,
+            "relief": true
+        },
+        "type": "Block",
+        "centered": true,
+        "_hp": -1,
+        "temperature": 20,
+        "size": [
+            2,
+            2
+        ]
+    },
+    {
+        "x": 138,
+        "y": 129,
+        "name": "sand_1",
+        "team": "PlayerTeam",
+        "exists": true,
+        "states": {
+            "type": "Block",
+            "z": 11,
+            "hardness": -1,
+            "mining_type": "sand",
+            "centered": true,
+            "relief": true
+        },
+        "type": "Block",
+        "centered": true,
+        "_hp": -1,
+        "temperature": 20,
+        "size": [
+            2,
+            2
+        ]
+    },
+    {
+        "x": 137,
+        "y": 129,
+        "name": "sand_1",
+        "team": "PlayerTeam",
+        "exists": true,
+        "states": {
+            "type": "Block",
+            "z": 11,
+            "hardness": -1,
+            "mining_type": "sand",
+            "centered": true,
+            "relief": true
+        },
+        "type": "Block",
+        "centered": true,
+        "_hp": -1,
+        "temperature": 20,
+        "size": [
+            2,
+            2
+        ]
+    },
+    {
+        "x": 135,
+        "y": 128,
+        "name": "snow_block(2x2)",
+        "team": "PlayerTeam",
+        "exists": true,
+        "states": {
+            "type": "Block",
+            "z": 10,
+            "hardness": -1,
+            "relief": true
+        },
+        "type": "Block",
+        "centered": false,
+        "_hp": -1,
+        "temperature": 20,
+        "size": [
+            2,
+            2
+        ]
+    },
+    {
+        "x": 137,
+        "y": 126,
+        "name": "snow_block(2x2)",
+        "team": "PlayerTeam",
+        "exists": true,
+        "states": {
+            "type": "Block",
+            "z": 10,
+            "hardness": -1,
+            "relief": true
+        },
+        "type": "Block",
+        "centered": false,
+        "_hp": -1,
+        "temperature": 20,
+        "size": [
+            2,
+            2
+        ]
+    },
+    {
+        "x": 139,
+        "y": 128,
+        "name": "snow_block(2x2)",
+        "team": "PlayerTeam",
+        "exists": true,
+        "states": {
+            "type": "Block",
+            "z": 10,
+            "hardness": -1,
+            "relief": true
+        },
+        "type": "Block",
+        "centered": false,
+        "_hp": -1,
+        "temperature": 20,
+        "size": [
+            2,
+            2
+        ]
+    },
+    {
+        "x": 137,
+        "y": 130,
+        "name": "snow_block(2x2)",
+        "team": "PlayerTeam",
+        "exists": true,
+        "states": {
+            "type": "Block",
+            "z": 10,
+            "hardness": -1,
+            "relief": true
+        },
+        "type": "Block",
+        "centered": false,
+        "_hp": -1,
+        "temperature": 20,
+        "size": [
+            2,
+            2
+        ]
+    }
+]

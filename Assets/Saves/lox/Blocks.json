@@ -1,0 +1,13 @@
+[
+    {
+        "x": 146,
+        "y": 123,
+        "name": "base",
+        "Storable": {
+            "storage": {
+                "lead": 130,
+                "coal": 10
+            }
+        }
+    }
+]

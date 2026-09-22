@@ -1,0 +1,197 @@
+{   
+    "none": {
+        "type": "Block",
+        "z": 30,
+        "mining_type": null,
+        "ignore_on_editor": true
+    },
+    "air": {
+        "type": "Block",
+        "z": 0,
+        "mining_type": null,
+        "ignore_on_editor": true
+    },
+    "sand_1": {
+        "type": "Block",
+        "z": 11,
+        "mining_type": "sand",
+        "centered": true,
+        "relief": true
+    },
+    "sand_2": {
+        "type": "Block",
+        "z": 11,
+        "mining_type": "sand",
+        "centered": true,
+        "relief": true
+    },
+    "water": {
+        "type": "Block",
+        "z": 15,
+        "mining_type": "water",
+        "centered": true,
+        "relief": true
+    },
+    "stone_1": {
+        "type": "Block",
+        "z": 10,
+        "centered": true,
+        "relief": true
+    },
+    "stone_2": {
+        "type": "Block",
+        "z": 10,
+        "centered": true,
+        "relief": true
+    },
+    "stone_3": {
+        "type": "Block",
+        "z": 10,
+        "centered": true,
+        "relief": true
+    },
+    "stone_4": {
+        "type": "Block",
+        "z": 10,
+        "hardness": -1,
+        "centered": true,
+        "relief": true
+    },
+    "snow_block(2x2)": {
+        "type": "Block",
+        "z": 20,
+        "hardness": -1,
+        "relief": true
+    },
+    "drill": {
+        "type": "Drill",
+        "z": 30,
+        "hardness": 2,
+        "cost": {"lead": 1},
+        "max_storage": 10,
+        "mining_speed": 1000,
+        "mining_max_temperature": 80
+    },
+    "conveyor_left": {
+        "type": "Conveyor",
+        "z": 30,
+        "hardness": 1,
+        "max_storage": 1,
+        "direction_start": [-1, 0],
+        "direction_end": [1, 0]
+    },
+    "conveyor_right": {
+        "type": "Conveyor",
+        "z": 30,
+        "hardness": 1,
+        "max_storage": 1,
+        "direction_start": [1, 0],
+        "direction_end": [-1, 0]
+    },
+    "conveyor_up": {
+        "type": "Conveyor",
+        "z": 30,
+        "hardness": 1,
+        "max_storage": 1,
+        "direction_start": [0, -1],
+        "direction_end": [0, 1]
+    },
+    "conveyor_down": {
+        "type": "Conveyor",
+        "z": 30,
+        "hardness": 1,
+        "max_storage": 1,
+        "direction_start": [0, 1],
+        "direction_end": [0, -1]
+    },
+    "base": {
+        "type": "Base",
+        "z":35,
+        "hardness":10,
+        "max_storage": 1000,
+        "ignore_on_editor": true
+    },
+    "lead_1": {
+        "type": "Block",
+        "z":14,
+        "mining_type": "lead"
+    },
+    "lead_2": {
+        "type": "Block",
+        "z":14,
+        "mining_type": "lead"
+    },
+    "lead_3": {
+        "type": "Block",
+        "z":14,
+        "mining_type": "lead"
+    },
+    "turrel_base(32x32)": {
+        "type": "Block",
+        "z":30,
+        "ignore_on_editor": true
+    },
+    "turrel_base(64x64)": {
+        "type": "Block",
+        "z":30,
+        "ignore_on_editor": true
+    },
+    "generator": {
+        "type": "Generator",
+        "z":30,
+        "hardness":3,
+        "mining_type": "coal",
+        "max_storage": 10,
+        "max_energy": 0.1,
+        "mining_speed": 0.8,
+        "energy_add": 0.5
+    },
+    "coal_1": {
+        "type": "Block",
+        "z":14,
+        "mining_type": "coal"
+    },
+    "coal_2": {
+        "type": "Block",
+        "z":14,
+        "mining_type": "coal"
+    },
+    "coal_3": {
+        "type": "Block",
+        "z":14,
+        "mining_type": "coal"
+    },
+    "connector": {
+        "type": "PowerBlock",
+        "z":30,
+        "hardness":1,
+        "mining_type": null
+    },
+    "battery": {
+        "type": "Battery",
+        "z":30,
+        "hardness":1,
+        "mining_type": null,
+        "max_stored_energy": 5
+    },
+    "healer": {
+        "type": "Healer",
+        "z":30,
+        "hardness":1
+    },
+    "processor": {
+        "type": "Processor",
+        "z":30,
+        "hardness":1
+    },
+    "memory_block": {
+        "type": "MemoryBlock",
+        "z":30,
+        "hardness":1
+    },
+    "peltier": {
+        "type": "Peltier",
+        "z": 30,
+        "hardness":1
+    }
+}

@@ -1,0 +1,14 @@
+{
+    "Base Electricity Components": {
+        "cost": {"lead": 50, "coal": 10},
+        "open": ["generator", "battery", "connector"]
+    },
+    "Base Logic Components": {
+        "cost": {"lead": 120, "coal":30},
+        "open": ["processor", "memory_block", "healer"]
+    },
+    "Base Thermal Components": {
+        "cost": {"lead":200},
+        "open": ["peltier"]
+    }
+}

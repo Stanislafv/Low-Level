@@ -1,0 +1,17 @@
+{
+    "version": "LOW-LEVEL Alpha 0.0.2 Thermal-Mode",
+    "time": "[2026-09-22] 22:38",
+    "ambient": 20,
+    "sizeX": 256,
+    "sizeY": 256,
+    "opened": [
+        "drill",
+        "generator",
+        "battery",
+        "connector",
+        "processor",
+        "memory_block",
+        "healer",
+        "peltier"
+    ]
+}
