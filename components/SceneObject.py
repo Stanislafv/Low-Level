@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 
 from typing import TYPE_CHECKING, TypeVar, Type
 if TYPE_CHECKING:
-    from ui.GameWindow import GameWindow
+    from world.World import World
 
 T = TypeVar("T")
 
@@ -14,11 +14,10 @@ class ComponentDict(dict[type, object]):
 
 @dataclass
 class SceneObject:
-    w:GameWindow
+    w:World
     x:int|float
     y:int|float
     name:str
-    team:str
 
     components:ComponentDict[Type[T], Type[T]] = field(default_factory=ComponentDict)
     exists:bool=True

@@ -5,12 +5,9 @@ from PyQt6.QtGui import QPixmap, QIcon
 from PyQt6.QtCore import Qt, QSize
 from PyQt6.QtWidgets import QMainWindow, QStackedWidget, QWidget
 
-import sys, applib
+from ui.Widgets import Labels, Buttons
 
-from ui.EditorWindow import SectorManager
-
-from base.functions import save, get_texture
-from base.font import Font
+from base.functions import get_texture, safe_class
 from base.MusicPlayer import MusicPlayer
 from base.cursors import Cursor
 from base.folders import folder, saves
@@ -18,6 +15,7 @@ from base.folders import folder, saves
 from ui.GameWindow import GameWindow
 from ui.EditorWindow import EditorWindow
 
+@safe_class
 class SectorChoiceWindow(QWidget):
     def __init__(self, window:MainWindow):
         super().__init__(window)
@@ -43,11 +41,9 @@ class SectorChoiceWindow(QWidget):
                 if child_layout is not None:
                     SectorChoiceWindow.clear_layout(child_layout)
 
-    def update_layout(self, window:GameWindow, editor=False):
-        title = QtWidgets.QLabel("Choice sector")
+    def update_layout(self, window:GameWindow):
+        title = Labels.Title("Choice sector")
         title.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        title.setFont(Font.Bold)
-        title.setStyleSheet("font-size: 20px")
 
         layout:QtWidgets.QVBoxLayout = self.layout()
 
@@ -56,46 +52,48 @@ class SectorChoiceWindow(QWidget):
         layout.addStretch()
         layout.addWidget(title)
         layout.addSpacing(5)
+
+        self.scroll = QtWidgets.QScrollArea()
+        self.scroll.setWidgetResizable(True)
+
+        layout.addWidget(self.scroll)
+
+        self.content = QtWidgets.QWidget()
+        self.content_layout = QtWidgets.QVBoxLayout(self.content)
+        
+        self.scroll.setWidget(self.content)
         
         for save_name in saves.list():
             save = saves.mkdir(save_name)
-            btn = QtWidgets.QPushButton(save_name.replace("_", " ".title()))
-            btn.setFont(Font.Bold)
-            btn.setCursor(Cursor.Hand)
+            btn = Buttons.Icon()
+            btn.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextUnderIcon)
+            btn.setProperty("role", "secondary")
+            btn.setText(save_name.replace("_", " ".title())) 
             btn.setIcon(QIcon(QPixmap(save.path("ViewMap.png"))))
             btn.setIconSize(QSize(256, 256))
+    
+            btn.clicked.connect(lambda a=None, w=window, name=save_name: [w.manager.switch_to(name), w.show()])
         
-            btn.clicked.connect(lambda a=None, w=window, name=save_name: [self.MainWindow.GameWindow.manager.switch_to(name), w.show()] if not editor else [self.MainWindow.GameWindow.manager.switch_to(name), w.show()])
+            self.content_layout.addWidget(btn, alignment=Qt.AlignmentFlag.AlignCenter)
         
-            layout.addWidget(btn)
+        layout.addSpacing(10)
         
-        layout.addSpacing(5)
-        
-        btn_new = QtWidgets.QPushButton("Empty")
-        btn_back = QtWidgets.QPushButton("Back")
-        
-        for btn in [btn_new, btn_back]:
-            btn.setFont(Font.Bold)
-            btn.setCursor(Cursor.Hand)
-            btn.clicked.connect(lambda: MusicPlayer.play("click_1"))
-            layout.addWidget(btn)
-        
+        btn_back = Buttons.Secondary("Back")
+        layout.addWidget(btn_back)
         btn_back.clicked.connect(lambda: self.MainWindow.MenuWindow.show())
-        btn_new.clicked.connect(lambda: [window.show(), SectorManager.clear(window.world)])
         
         layout.addStretch()
 
-    @save
-    def show(self, window:GameWindow, editor=False):
+    def show(self, window:GameWindow):
         if len(saves.list()) == 0:
             window.show()
             return
 
         self.MainWindow.widget.setCurrentIndex(3)
-        self.update_layout(window, editor)
+        self.update_layout(window)
 
+@safe_class
 class MenuWindow(QWidget):
-    @save
     def __init__(self, window:MainWindow):
         super().__init__(window)
 
@@ -111,20 +109,17 @@ class MenuWindow(QWidget):
 
         left_panel.addStretch()
         
-        title = QtWidgets.QLabel("LOW-LEVEL")
-        title.setFont(Font.Bold) 
+        title = Labels.Title("LOW-LEVEL")
         title.setAlignment(Qt.AlignmentFlag.AlignCenter)
         left_panel.addWidget(title)
         
-        btn_play = QtWidgets.QPushButton("Play")
-        btn_settings = QtWidgets.QPushButton("Settings")
-        btn_editor = QtWidgets.QPushButton("Editor")
-        btn_exit = QtWidgets.QPushButton("Exit")
+        btn_sandbox = Buttons.Primary("Sandbox")
+        btn_settings = Buttons.Secondary("Settings")
+        btn_exit = Buttons.Secondary("Exit")
+        btn_editor = Buttons.Secondary("Editor")
         
-        for btn in [btn_play, btn_settings, btn_exit, btn_editor]:
+        for btn in [btn_sandbox, btn_settings, btn_editor, btn_exit]:
             btn.setFixedSize(300, 80)
-            btn.setFont(Font.Bold)
-            btn.setCursor(Cursor.Hand)
             left_panel.addWidget(btn, alignment=Qt.AlignmentFlag.AlignCenter)
         
         left_panel.addStretch()  
@@ -143,9 +138,9 @@ class MenuWindow(QWidget):
         main_layout.addWidget(left_widget)
         main_layout.addWidget(image_label)  
         
-        btn_play.clicked.connect(lambda: self.MainWindow.SectorChoiceWindow.show(self.MainWindow.GameWindow))
+        btn_sandbox.clicked.connect(lambda: self.MainWindow.SectorChoiceWindow.show(self.MainWindow.GameWindow))
         btn_settings.clicked.connect(lambda: ...)
-        btn_editor.clicked.connect(lambda: self.MainWindow.SectorChoiceWindow.show(self.MainWindow.EditorWindow, editor=True))
+        btn_editor.clicked.connect(lambda: self.MainWindow.SectorChoiceWindow.show(self.MainWindow.EditorWindow))
 
         btn_exit.clicked.connect(self.MainWindow.close)
 
@@ -153,19 +148,17 @@ class MenuWindow(QWidget):
         MusicPlayer.play("click_2")
         self.MainWindow.GameWindow.show()
 
-    @save
     def show(self):
         self.MainWindow.widget.setCurrentIndex(0)
 
+@safe_class
 class MainWindow(QMainWindow):
-    @save
     def __init__(self):
         super().__init__()
 
         self.setWindowTitle("Low-Level")
         self.setWindowIcon(QIcon(get_texture("icon")))
         self.setCursor(Cursor.Cursor)
-        self.setAttribute(Qt.WidgetAttribute.WA_DeleteOnClose)
 
         self.setWindowFlag(Qt.WindowType.FramelessWindowHint)
 

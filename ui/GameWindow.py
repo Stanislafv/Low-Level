@@ -1,36 +1,23 @@
 from __future__ import annotations
 
 from PyQt6 import QtWidgets
-from PyQt6.QtGui import QBrush, QColor, QPainter, QIcon, QPixmap
+from PyQt6.QtGui import QBrush, QColor, QPainter, QIcon, QPixmap, QRadialGradient
 from PyQt6.QtCore import Qt, QRectF, QTimer
-from PyQt6.QtWidgets import QWidget, QGraphicsScene, QGraphicsView, QListWidget, QListWidgetItem, QGraphicsRectItem
+from PyQt6.QtWidgets import QWidget, QGraphicsScene, QGraphicsView, QListWidget, QListWidgetItem, QGraphicsItem
 
 from PyQt6.QtOpenGLWidgets import QOpenGLWidget
 
 from PyQt6 import QtCore
 
-from base.functions import save, get_texture
+from base.functions import safe_class, get_texture
 from base.font import Font
 from base.cursors import Cursor
 from base.MusicPlayer import MusicPlayer
-from base.folders import folder, block_config
-
-from composites.Block import Block
-from composites.Entity import Entity, entities
+from base.folders import folder, block_config, unit_config
 
 from ui.PauseMenu import PauseMenu
 
-import terminal, time, applib, math
-
-from base.composites import composites
-
-from world.SectorManager import SectorManager
-
-from components.Clickable import Clickable
-from components.Updatable import Updatable
-from components.Removable import Removable
-from components.Placable import Placable
-from components.Storable import Storable
+import time, math
 
 from world.WorldManager import WorldManager
 from world.WorldLoader import WorldLoader
@@ -38,13 +25,35 @@ from world.World import World
 
 from ui.ResourcePanel import ResourcePanel
 
-from typing import TYPE_CHECKING, Literal
+from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from composites.StorageBlock import StorageBlock
     from ui.MainWindow import MainWindow
 
 round = math.floor
 
+class MapScene(QGraphicsScene):
+    def __init__(self, intensity, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.intensity = intensity
+
+    def drawForeground(self, painter: QPainter, rect: QRectF):
+        super().drawForeground(painter, rect)
+        
+        view = self.views()[0]
+        viewport_rect = view.mapToScene(view.viewport().rect()).boundingRect()
+
+        center = viewport_rect.center()
+        radius = max(viewport_rect.width(), viewport_rect.height()) * 0.7
+
+        grad = QRadialGradient(center, radius)
+        grad.setColorAt(0.0, QColor(0, 0, 0, 0))
+        grad.setColorAt(0.3, QColor(0, 0, 0, 0))
+        grad.setColorAt(0.75, QColor(0, 0, 0, int(180*self.intensity)))
+        grad.setColorAt(1.0, QColor(0, 0, 0, int(255*self.intensity)))
+
+        painter.fillRect(viewport_rect, QBrush(grad))
+
+@safe_class
 class GameWindow(QWidget):
     def __init__(self, window:MainWindow, loader=WorldLoader):
         super().__init__()
@@ -53,14 +62,16 @@ class GameWindow(QWidget):
 
         self.main_window:MainWindow = window
         
-        self.scene:QGraphicsScene = QGraphicsScene()
+        self.scene:MapScene = MapScene(0)
         self.scene.setSceneRect(QRectF(0, 0, 8192, 8192))
 
         self.resource_panel = ResourcePanel(self)
         self.resource_panel.show()
         self.resource_panel.setAutoFillBackground(True)
 
-        self.manager = WorldManager(self.scene, self.update_tool_panel, loader=loader, resource_panel=self.resource_panel)
+        self.view = QGraphicsView(self.scene, self)
+
+        self.manager = WorldManager(self, self.update_tool_panel, loader=loader, resource_panel=self.resource_panel)
 
         self.manager.current = World()
         assert self.manager.current is not None
@@ -68,7 +79,6 @@ class GameWindow(QWidget):
         background_brush = QBrush(QColor(30, 30, 30))
         self.scene.setBackgroundBrush(background_brush)
 
-        self.view = QGraphicsView(self.scene, self)
         self.view.setViewport(QOpenGLWidget())
         self.view.setRenderHint(QPainter.RenderHint.Antialiasing, False)
         self.view.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
@@ -115,13 +125,13 @@ class GameWindow(QWidget):
 
         if not self.manager.current.devmode:
             self.tool_names = {}
-            for clt in [block_config, entities]:
+            for clt in [block_config, unit_config]:
                 for name, value in clt.items():
-                    if not value.get("relief", False) and not value.get("ignore_on_editor", False):
+                    if not value.get("relief", False):
                         self.tool_names[name] = value
         else:
             self.tool_names = block_config
-            self.tool_names.update(entities)
+            self.tool_names.update(unit_config)
 
         self.tool_panel.setCurrentRow(0)
 
@@ -134,8 +144,6 @@ class GameWindow(QWidget):
         central.addWidget(self.tool_panel)
 
         self.setLayout(central)
-
-        self.overlay:QGraphicsRectItem|None = None
 
         self.vx = 0
         self.vy = 0
@@ -173,40 +181,32 @@ class GameWindow(QWidget):
 
                     self.tool_panel.addItem(item)
 
-    def _create_overlay(self):
-        self.overlay = QGraphicsRectItem(0, 0, self.manager.current.sizeX*32, self.manager.current.sizeY*32)
-        self.overlay.setBrush(QColor(0, 0, 0, 180))
-        self.overlay.setZValue(100)  
-        self.scene.addItem(self.overlay)
-        self.overlay.hide()
-
     def blur(self):
-        if self.overlay is None:
-            self._create_overlay()
-        self.overlay.setOpacity(0.95)
-        self.overlay.show()
+        if self.manager.overlay is not None:
+            self.manager.overlay.setOpacity(0.8)
+            self.manager.overlay.show()
 
     def unblur(self):
-        if self.overlay is not None:
-            self.overlay.hide()
+        if self.manager.overlay is not None:
+            self.manager.overlay.setOpacity(0)
+            self.manager.overlay.show()
 
-    @save
     def closeEvent(self, event):
+        MusicPlayer.stop()
         MusicPlayer.play("click_2")
         if self.manager.current_name is not None:
             self.manager.save(self.manager.current_name)
+        self.timer.stop()
         self.pause_menu.Back()
         self.main_window.MenuWindow.show()
         return event.accept()
     
-    @save
     def on_tool_changed(self, current, f):
         if current is not None:
             self.view.setFocus()
             MusicPlayer.play("click_1")
             self.manager.current.placing_block = current.data(Qt.ItemDataRole.UserRole)
 
-    @save
     def mousePressEvent(self, event):
         if self.menu_active is not None:
             return
@@ -233,10 +233,9 @@ class GameWindow(QWidget):
     def keyReleaseEvent(self, event):
         self.keys_pressed.discard(event.nativeScanCode())
 
-    @save
     def update(self):
             self.now = time.time()
-            dt = self.now - self.last_time 
+            dt = (self.now - self.last_time)
             self.last_time = self.now
 
             self.update_cam(dt)
@@ -276,7 +275,7 @@ class GameWindow(QWidget):
             if abs(self.vx) > 0.1 or abs(self.vy) > 0.1:
                 current_x = self.view.horizontalScrollBar().value() # type: ignore
                 current_y = self.view.verticalScrollBar().value() # type: ignore
-                
+
                 self.view.horizontalScrollBar().setValue(current_x + int(self.vx * dt * 60)) # type: ignore 
                 self.view.verticalScrollBar().setValue(current_y + int(self.vy * dt * 60)) # type: ignore
 
@@ -291,7 +290,9 @@ class GameWindow(QWidget):
         self.target_scale = max(0.4, min(2.0, self.target_scale))
 
     def __repr__(self):
-        return f"GameWindow(sizeX: {self.sizeX}, sizeY: {self.sizeY})"
+        return f"GameWindow"
 
     def show(self):
         self.main_window.widget.setCurrentIndex(1)
+        self.timer.start()
+        MusicPlayer.start()

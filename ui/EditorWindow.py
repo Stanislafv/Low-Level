@@ -1,28 +1,29 @@
 from PyQt6 import QtWidgets
 import time
 
-from world.SectorManager import SectorManager
+from base.MusicPlayer import MusicPlayer
+
+from base.functions import safe_class
 
 from ui.GameWindow import GameWindow
+from world.WorldEditorLoader import WorldEditorLoader
 
+@safe_class
 class EditorWindow(GameWindow):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, *args, loader=WorldEditorLoader, **kwargs):
+        super().__init__(*args, loader=loader, **kwargs)
         save_btn = QtWidgets.QPushButton("Save")
-        label = QtWidgets.QLabel("Sector name:")
         entry = QtWidgets.QLineEdit()
-        entry.setText("None")
+        entry.setPlaceholderText("Type sector name...")
         load_btn = QtWidgets.QPushButton("Load")
 
-        load_btn.clicked.connect(lambda: SectorManager.load_editor(self, entry.text()))
-
-        save_btn.clicked.connect(lambda: SectorManager.save_editor(self, entry.text()))
+        load_btn.clicked.connect(lambda: self.manager.load(entry.text()))
+        save_btn.clicked.connect(lambda: self.manager.save(entry.text()))
 
         layout = QtWidgets.QVBoxLayout()
 
         layout.addStretch()
         layout.addWidget(save_btn)
-        layout.addWidget(label)
         layout.addWidget(entry)
         layout.addWidget(load_btn)
         layout.addStretch()
@@ -34,9 +35,11 @@ class EditorWindow(GameWindow):
         self.layout().addWidget(widget)
 
     def show(self):
-        self.MainWindow.widget.setCurrentIndex(2)
+        self.main_window.widget.setCurrentIndex(2)
+        self.timer.start()
+        MusicPlayer.start()
 
-    def game_tick(self):
+    def update(self):
         self.now = time.time()
         dt = self.now - self.last_time 
         self.last_time = self.now

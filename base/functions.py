@@ -12,21 +12,34 @@ def try_int(n):
         return int(n)
     return float(n)
 
-def save(func:Callable) -> Callable[..., Any]:
+def safe(func:Callable) -> Callable[..., Any]:
     def wrapper(*args, **kwargs):
         try:
             return func(*args, **kwargs)
         except Exception as e:
-            if str((func.__qualname__, e)) not in save.errors:
+            if str((func.__qualname__, e)) not in safe.errors:
                 folders.folder.log.write(f"<{func.__qualname__}> - {traceback.format_exc()}", type="RuntimeError", set_error=True)
-                save.errors.add(str((func.__qualname__, e)))
+                safe.errors.add(str((func.__qualname__, e)))
             else:
                 applib.lprint(f"<{func.__qualname__}> - {e}", type="RuntimeError", set_error=True)
     return wrapper
 
-save.errors = set()
+safe.errors = set()
 
-@save
+def safe_class(cls):
+    for name, attr in list(vars(cls).items()):
+        if name.startswith("__") and name.endswith("__") and name != "__init__":
+            continue
+        if isinstance(attr, staticmethod):
+            setattr(cls, name, staticmethod(safe(attr.__func__)))
+        elif isinstance(attr, classmethod):
+            setattr(cls, name, classmethod(safe(attr.__func__)))
+        elif not isinstance(attr, property) and callable(attr):
+            setattr(cls, name, safe(attr))
+            
+    return cls
+
+@safe
 def get_texture(name) -> QPixmap:
     if name not in TEXTURE_CACHE:
         path = folders.textures.path(f"{name}.png")

@@ -20,8 +20,6 @@ class Base(Block):
 
         self.panel = resource_panel
 
-        # ДЕРЕВА НЕТУУУУ  А АААААААААААААААААААААААА
-
     @staticmethod
     def click(obj:Base):
         if obj.tree is not None:
@@ -30,6 +28,6 @@ class Base(Block):
             obj.tree.Show()
 
     @staticmethod
-    def upd(obj:Base):
+    def upd(obj:Base, task):
         if obj.panel is not None:
             obj.panel.update(obj.components[Storable].dict())

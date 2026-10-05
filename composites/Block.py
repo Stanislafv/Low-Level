@@ -12,22 +12,20 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from world.World import World
 
+@func.safe_class
 class Block(SceneObject):
-    @func.save
-    def __init__(self, w:World, x:int, y:int, name:str, team:str, **kwargs):
+    save = ("x", "y", "name")
+    def __init__(self, w:World, x:int, y:int, name:str):
         if x >= w.sizeX or y >= w.sizeY or x < 0 or y < 0:
             self.exists = False
             folder.log.write(f"Block <{name}(x:{x}, y:{y})> Located behind the world", type="BlockData")
 
-        super().__init__(w, x, y, name, team)
+        super().__init__(w, x, y, name)
         
         self.pixmap = func.get_texture(self.name)
         self.size = (self.pixmap.width()//32, self.pixmap.height()//32)
 
         self.temperature = self.w.temperature
-
-        for name, value in kwargs.items():
-            self.__setattr__(name, value)
 
         self.place()
     
@@ -57,7 +55,6 @@ class Block(SceneObject):
                 cells.add((cell[0]+coef[0], cell[1]+coef[1]))
         return cells 
 
-    @func.save
     def place(self):
         if hasattr(self, "pixmap_item"):
             folder.log.write("2 раза ставишь", type=applib.ERROR)

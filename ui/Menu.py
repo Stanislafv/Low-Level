@@ -3,14 +3,14 @@ from __future__ import annotations
 from PyQt6 import QtWidgets
 
 from base.cursors import Cursor
-from base.functions import save
+from base.functions import safe_class
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from ui.GameWindow import GameWindow
 
+@safe_class
 class Menu(QtWidgets.QWidget):
-    @save
     def __init__(self, window:GameWindow, parent:Menu = None):
         self.Window = window
         self.Parent = parent
@@ -18,7 +18,6 @@ class Menu(QtWidgets.QWidget):
         self.setCursor(Cursor.Cursor)
         self.hide()
 
-    @save
     def Show(self, *args):
         self.Window.menu_active = self
         
@@ -35,7 +34,6 @@ class Menu(QtWidgets.QWidget):
             self.Window.tool_panel.hide()
             self.Window.blur()
 
-    @save
     def Back(self, *args):
         self.hide()
         self.Window.menu_active = self.Parent

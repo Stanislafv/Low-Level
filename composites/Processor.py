@@ -5,7 +5,7 @@ from PyQt6 import QtCore
 
 from base.font import Font
 from base.cursors import Cursor
-from base.functions import try_int, save
+from base.functions import safe_class
 from base.MusicPlayer import MusicPlayer
 
 from composites.MemoryBlock import MemoryBlock
@@ -17,6 +17,7 @@ from ui.Menu import Menu
 
 commands = ["MOV", "ADD", "PUSH", "JMP", "OUT"]
 
+@safe_class
 class Highlighter(QSyntaxHighlighter):
     def __init__(self, document):
         super().__init__(document)
@@ -52,7 +53,6 @@ class Highlighter(QSyntaxHighlighter):
         pattern = QRegularExpression("//[^\n]*")
         self.rules.append((pattern, comment_format))
 
-    @save
     def highlightBlock(self, text):
         for pattern, format in self.rules:
             iterator = pattern.globalMatch(text)
@@ -64,9 +64,11 @@ class Highlighter(QSyntaxHighlighter):
                     format                  
                 )
 
+@safe_class
 class ProcessorEditor(Menu):
     def __init__(self, processor:Processor):
-        super().__init__(processor.w)
+        return
+        super().__init__(processor.w.scene)
         self.processor = processor
 
         self.setAutoFillBackground(True)
@@ -112,6 +114,7 @@ class ProcessorEditor(Menu):
     def save(self):
         self.processor.code = self.editor.toPlainText()
 
+@safe_class
 class Processor(MemoryBlock):
     def __init__(self, *args, **kwargs):
         self._time_after = 0
@@ -170,7 +173,6 @@ class Processor(MemoryBlock):
                 self.editor.console.append(f"Segmentation fault at {self.active_line+1} line")
                 self.stop()
 
-    @save
     def parsing(self, *args):
         code = self.code.replace(";", "\n")
         self.split_code = code.split("\n")
@@ -194,7 +196,6 @@ class Processor(MemoryBlock):
         self.marks = {}
         self.active = False
 
-    @save
     def update(self, tick, dt):
         if not self.active:
             return

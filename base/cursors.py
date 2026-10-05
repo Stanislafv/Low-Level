@@ -1,16 +1,25 @@
 from PyQt6.QtGui import QCursor, QPixmap
-from base.folders import cursors
+from base.folders import cursors, folder
 import os
 
-from base.font import application
-
 class CursorCreator:
+    @staticmethod
     def create(path, x=27, y=27):
         if os.path.exists(f"{path}.png"):
             return QCursor(QPixmap(f"{path}.png"), x, y)
         else:
-            return QCursor()
+            folder.log.write(f"Cursor <{path}.png> not found")
+            return QCursor() 
 
-class Cursor:
-    Hand = CursorCreator.create(cursors.path("hand"))
-    Cursor = CursorCreator.create(cursors.path("cursor"))
+class CursorMeta(type):
+    cache = {}
+    
+    def __getattr__(cls, name) -> QCursor:
+        if name in cls.cache:
+            return cls.cache[name]
+        cursor = CursorCreator.create(cursors.path(name))
+        cls.cache[name] = cursor
+        return cursor
+
+class Cursor(metaclass=CursorMeta):
+    pass

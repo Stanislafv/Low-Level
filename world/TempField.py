@@ -1,7 +1,11 @@
 import numpy as np
+
 from base.folders import folder, saves
+from base.functions import safe_class
+
 import os
 
+@safe_class
 class TempField:
     def __init__(self, sizeY, sizeX, ambient, relax=0.01, diffusion=0.15):
         self.field = np.full((sizeY, sizeX), ambient, dtype=np.float32)

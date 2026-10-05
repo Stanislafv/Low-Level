@@ -1,25 +1,31 @@
-import os, sys
-import base.folders as folders
-from PyQt6.QtGui import QFont, QFontDatabase
-from PyQt6.QtWidgets import QApplication
+from __future__ import annotations
 
-application = QApplication(sys.argv)
+import os
+from base.folders import folder, fonts
+from PyQt6.QtGui import QFont, QFontDatabase
 
 class FontCreator:
     @staticmethod
     def create(name, size):
         name = f"{name}.ttf"
-        if os.path.exists(folders.fonts.path(name)):
-            font_id = QFontDatabase.addApplicationFont(folders.fonts.path(name))
+        if os.path.exists(fonts.path(name)):
+            font_id = QFontDatabase.addApplicationFont(fonts.path(name))
             families = QFontDatabase.applicationFontFamilies(font_id)
             return QFont(families[0], size)
         else:
-            folders.folder.log.write(f"Font <{name}> not found in <{folders.fonts.file_path}>")
+            folder.log.write(f"Font <{name}> not found in <{fonts.file_path}>")
             return QFont("Arial", size, QFont.Weight.Bold, True)
 
-class Font:
-    Bold:QFont = FontCreator.create("Quantico-Bold", 12)
-    Bold.setBold(True)
+class FontMeta(type):
+    _cache = {}
 
-    Regular:QFont = FontCreator.create("Quantico-Regular", 12)
-    Italic:QFont = FontCreator.create("Quantico-Italic", 12)
+    def __getattr__(cls, name) -> QFont:
+        if name in cls._cache:
+            return cls._cache[name]
+        
+        font = FontCreator.create(name, 12)
+        cls._cache[name] = font
+        return font
+
+class Font(metaclass=FontMeta):
+    pass

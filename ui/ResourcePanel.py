@@ -1,7 +1,7 @@
 from PyQt6 import QtWidgets
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QLabel
-from base.font import Font
+
+from ui.Widgets import Labels
 
 class ResourcePanel(QtWidgets.QWidget):
     def __init__(self, window):
@@ -14,8 +14,7 @@ class ResourcePanel(QtWidgets.QWidget):
         self.resource_types = ["coal", "lead"]
 
         for resource in self.resource_types:
-            label = QLabel(f"{resource}: 0")
-            label.setFont(Font.Bold)
+            label = Labels.Subtitle(f"{resource}: 0")
             label.setAlignment(Qt.AlignmentFlag.AlignCenter)
             self.layout_.addWidget(label)
             self.labels[resource] = label

@@ -18,7 +18,7 @@ class Conveyor(Block):
         self.components[Updatable] = Updatable(self, [(1000, self.upd)])
 
     @staticmethod
-    def upd(obj:Conveyor):    
+    def upd(obj:Conveyor, task):    
         start_block:list[Block] = obj.w.block_map.get((obj.x - obj.direction_start[0], obj.y - obj.direction_start[1]))
         end_block:list[Block] = obj.w.block_map.get((obj.x - obj.direction_end[0], obj.y - obj.direction_end[1]))
 

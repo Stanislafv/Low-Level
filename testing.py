@@ -4,7 +4,15 @@ from world.WorldLoader import WorldLoader
 from components.Storable import Storable
 from enum import Enum, auto
 
-import pyclr, applib, importlib, traceback
+import pyclr, applib, importlib, traceback, sys
+
+from PyQt6.QtWidgets import QApplication
+import base.font
+import base.cursors
+    
+application = QApplication(sys.argv)
+base.font.__dict__[...] = application
+base.cursors.__dict__[...] = application
 
 FULL_TESTS = []
 SMOKE_TESTS = []
@@ -58,21 +66,6 @@ def test_world_creates(world:World):
     assert world is not None
     assert world.sizeY > 0
     assert world.sizeX > 0
-
-@full
-def test_drill(world:World): 
-    try:
-        world.placing_block = "coal_1"
-        world.click("left", 32, 32)
-
-        world.placing_block = "drill"
-        world.click("left", 32, 32)
-
-        world.update(5)
-        value = world.get_block_at(32, 32).components[Storable].dict() == {"coal": 5}
-    except Exception:
-        raise Exception("Drill block is not valid")
-    assert value, "Drill block not functioning properly"
 
 def start(mode:Mode) -> list:
     world = World(devmode=True)

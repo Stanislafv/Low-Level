@@ -1,5 +1,9 @@
 from __future__ import annotations
 
+from ui.Widgets import Labels, Widget, Buttons, AutoUI
+from ui.Menu import Menu
+from PyQt6 import QtWidgets
+
 from typing import TYPE_CHECKING
 
 from base.font import Font
@@ -8,7 +12,7 @@ from base.MusicPlayer import MusicPlayer
 if TYPE_CHECKING:
     from components.SceneObject import SceneObject
 
-class Storable():
+class Storable:
     save = ("storage",)
     def __init__(self, owner:SceneObject, storage:dict|None, max_size:int):
         self.owner = owner
@@ -87,6 +91,22 @@ class Storable():
                 self.old_dict = self.dict().copy()
                 text = self.show()
                 self.center.setPlainText(text)
+
+    def ui(self):
+        class w(AutoUI.Component):
+            def __init__(self, obj:Storable):
+                super().__init__(obj)
+                
+                layout = QtWidgets.QVBoxLayout(self)  
+                self.title = Labels.Title("Storage", centered=True)
+                self.st_label = Labels.Body(self.obj.show(), centered=True)
+                layout.addWidget(self.title)
+                layout.addWidget(self.st_label)
+
+            def refresh(self):
+                self.st_label.setText(self.obj.show())
+
+        return w(self)
 
     @staticmethod
     def remove(block:SceneObject):

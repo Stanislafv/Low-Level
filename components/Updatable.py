@@ -23,8 +23,9 @@ class Updatable:
             self.every(task[0], task[1])
 
     def every(self, ms:int, func:Callable):
-        self.tasks.append(Task(ms, func))
-        return self
+        task = Task(ms, func)
+        self.tasks.append(task)
+        return task
 
     def __call__(self, dt):
         for task in self.tasks:
@@ -32,7 +33,7 @@ class Updatable:
             while task.progress >= task.ms:
                 task.progress -= task.ms
                 try:
-                    task.func(self.owner)
+                    task.func(self.owner, task)
                 except Exception:
                     folder.log.write(traceback.format_exc(1), type=applib.ERROR)
                     break

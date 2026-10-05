@@ -9,8 +9,9 @@ from base.components import components
 
 from PyQt6.QtWidgets import QGraphicsItem
 from PyQt6.QtGui import QPixmap
+from PyQt6.QtCore import QRectF
 
-from components.Storable import Storable
+from base.functions import safe_class
 
 from world.TempField import TempField
 from world.World import World
@@ -18,12 +19,13 @@ from world.World import World
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from composites.Block import Block
-    
+
 class WorldLoadError(Exception): ...
 
+@safe_class
 class WorldLoader:
     @staticmethod
-    def load(name, scene=None) -> World | None: 
+    def load(name, scene=None, view=None, window=None) -> World | None: 
             if not os.path.exists(saves.path(name)):
                 folder.log.write(f"File of sector <{name}> not found", type="LoadError", set_error=1)
                 raise WorldLoadError(f"File of sector <{name}> not found")
@@ -36,6 +38,8 @@ class WorldLoader:
             
             world = World(config.get("sizeX", 256), config.get("sizeY", 256), scene=scene)
 
+            world.window = window
+
             for block in world.blocks.copy():
                 world.remove_block(block)
 
@@ -43,7 +47,20 @@ class WorldLoader:
 
             world.temperature = TempField(config.get("sizeX", 256), config.get("sizeY", 256), ambient=config.get("ambient", 0))
             world.temperature.load(name)
-    
+
+            if view is not None:
+                cam_x = config.get("camX", None)
+                cam_y = config.get("camY", None)
+                if cam_x is None or cam_y is None:
+                    cam_x = config.get("sizeX", 256)//2
+                    cam_y = config.get("sizeY", 256)//2
+
+                view.horizontalScrollBar().setValue(cam_x)
+                view.verticalScrollBar().setValue(cam_y)
+
+            if scene is not None:
+                scene.setSceneRect(QRectF(0, 0, world.sizeX*32, world.sizeY*32))
+                
             if os.path.exists(sector_path.path("ReliefMap.png")) and world.scene is not None:
                 pixmap = QPixmap(sector_path.path("ReliefMap.png"))
     
@@ -60,7 +77,7 @@ class WorldLoader:
                         folder.log.write(f"Invalid composite settings KeyError: <{e}>")
                         continue
 
-                    block_сам:Block = block_class(world, name=block["name"], x=block["x"], y=block["y"], team="PlayerTeam")
+                    block_сам:Block = block_class(world, name=block["name"], x=block["x"], y=block["y"])
                     if block["name"] == "base":
                         world.Base = block_сам
 
@@ -79,7 +96,7 @@ class WorldLoader:
                 return world
 
     @staticmethod
-    def save(world:World, name):
+    def save(world:World, name, view=None):
             try:
                 if not os.path.exists(saves.path(name)):
                     folder.log.write(f"File of sector not found", type="SaveError")
@@ -91,8 +108,11 @@ class WorldLoader:
                 for block in world.blocks:
                     if not block.exists:
                         continue
-                
-                    entry = {"x": block.x, "y": block.y, "name": block.name}
+
+                    entry = {}
+                    for n in block.__class__.save:
+                        entry[n] = block.__getattribute__(n)
+
                     for atr, value in block.components.items():
                         if hasattr(atr, "save"):
                             entryf = {}
@@ -121,6 +141,9 @@ class WorldLoader:
                 config = {"version": folder.version, "time": current_time.strftime("[%Y-%m-%d] %H:%M"),
                         "ambient": world.temperature.ambient, "sizeX": world.sizeX, "sizeY": world.sizeY,
                         "opened": world.opened}
+
+                if view is not None:
+                    config.update({"camX": view.horizontalScrollBar().value(), "camY": view.verticalScrollBar().value()})
                 
                 sector_path.write("Blocks.json", blocks, type="json")
                 sector_path.write("config.json", config, type="json")

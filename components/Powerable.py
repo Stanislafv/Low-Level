@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from components.SceneObject import SceneObject
 
 class Powerable:
-    save = ("energy",)
+    save = ("energy", "parents")
     def __init__(self, owner:SceneObject, max_energy:float|int):
         self.owner = owner
 

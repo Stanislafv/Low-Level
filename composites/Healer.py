@@ -3,7 +3,7 @@ from __future__ import annotations
 from composites.Block import Block
 
 from base.folders import block_config
-from base.functions import save, get_texture
+from base.functions import get_texture
 
 from components.Powerable import Powerable
 from components.Updatable import Updatable

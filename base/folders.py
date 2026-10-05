@@ -17,5 +17,5 @@ fonts = mainfolder.mkdir("Fonts")
 cursors = mainfolder.mkdir("Cursors")
 
 block_config = mainfolder.read("block_config.json", type="json")
-entity_config = mainfolder.read("entity_config.json", type="json")
+unit_config = mainfolder.read("unit_config.json", type="json")
 

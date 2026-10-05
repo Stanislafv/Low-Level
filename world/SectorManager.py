@@ -21,8 +21,8 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from world.World import World
 
+@func.safe_class
 class SectorManager:
-    @func.save
     @staticmethod
     def save_editor(window:World, name):
         pixmap = QPixmap(window.sizeX*32, window.sizeY*32)
@@ -69,7 +69,6 @@ class SectorManager:
 
         pixmap.scaled(256, 256).save(sector_path.path("ViewMap.png"), "png")
 
-    @func.save
     @staticmethod
     def save(window:World, name):
         if not os.path.exists(folders.saves.path(name)):
@@ -102,7 +101,6 @@ class SectorManager:
         sector_path.write("Blocks.json", blocks, type="json")
         sector_path.write("config.json", config, type="json")
     
-    @func.save
     @staticmethod
     def load_editor(window:World, name):
         if not os.path.exists(folders.saves.path(name)):
@@ -126,7 +124,6 @@ class SectorManager:
                 if hasattr((obj:=block_class(window, **a)), "place"):
                     obj.place()
 
-    @func.save
     @staticmethod
     def load(window:World, name):
         if not os.path.exists(folders.saves.path(name)):
@@ -165,7 +162,6 @@ class SectorManager:
 
         window.save_name = name
 
-    @func.save
     @staticmethod
     def clear(window:World):
         for block in window.blocks[1:]:

@@ -11,7 +11,7 @@ if __name__ != "__main__":
             super().__init__(parent)
             self.setWindowTitle("Dev Console")
             self.resize(900, 600)
-            self.setWindowFlags(self.windowFlags() | Qt.WindowType.WindowStaysOnTopHint)
+            self.setWindowFlags(self.windowFlags()|Qt.WindowType.WindowStaysOnTopHint)
             self.cmd = cmd
             self.buffer = []
 
