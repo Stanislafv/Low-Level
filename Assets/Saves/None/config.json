@@ -1,6 +1,6 @@
 {
-    "version": "LOW-LEVEL Alpha 0.0.2 Thermal-Mode",
-    "time": "[2026-09-22] 22:38",
+    "version": "LOW-LEVEL Alpha 0.2.2 Thermal-Mode",
+    "time": "[2026-10-05] 22:49",
     "ambient": 20,
     "sizeX": 256,
     "sizeY": 256,
@@ -10,5 +10,7 @@
         "conveyor_up",
         "conveyor_left",
         "conveyor_right"
-    ]
+    ],
+    "camX": 0,
+    "camY": 0
 }

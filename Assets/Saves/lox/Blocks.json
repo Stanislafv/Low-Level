@@ -1,13 +1,405 @@
 [
     {
+        "x": 151,
+        "y": 124,
+        "name": "conveyor_left",
+        "Storable": {
+            "storage": {
+                "coal": 1
+            }
+        }
+    },
+    {
+        "x": 150,
+        "y": 124,
+        "name": "conveyor_left",
+        "Storable": {
+            "storage": {
+                "coal": 0
+            }
+        }
+    },
+    {
+        "x": 149,
+        "y": 124,
+        "name": "conveyor_left",
+        "Storable": {
+            "storage": {
+                "coal": 0
+            }
+        }
+    },
+    {
+        "x": 152,
+        "y": 115,
+        "name": "coal_1"
+    },
+    {
+        "x": 151,
+        "y": 115,
+        "name": "coal_1"
+    },
+    {
+        "x": 152,
+        "y": 116,
+        "name": "coal_1"
+    },
+    {
+        "x": 151,
+        "y": 116,
+        "name": "coal_1"
+    },
+    {
+        "x": 152,
+        "y": 124,
+        "name": "conveyor_left",
+        "Storable": {
+            "storage": {}
+        }
+    },
+    {
+        "x": 172,
+        "y": 125,
+        "name": "air"
+    },
+    {
+        "x": 221,
+        "y": 211,
+        "name": "drill",
+        "Storable": {
+            "storage": {}
+        },
+        "Switchable": {
+            "state": false
+        }
+    },
+    {
+        "x": 154,
+        "y": 124,
+        "name": "lead_2"
+    },
+    {
+        "x": 150,
+        "y": 116,
+        "name": "conveyor_left",
+        "Storable": {
+            "storage": {
+                "coal": 0
+            }
+        }
+    },
+    {
+        "x": 148,
+        "y": 116,
+        "name": "conveyor_left",
+        "Storable": {
+            "storage": {
+                "coal": 0
+            }
+        }
+    },
+    {
+        "x": 149,
+        "y": 116,
+        "name": "conveyor_left",
+        "Storable": {
+            "storage": {
+                "coal": 1
+            }
+        }
+    },
+    {
+        "x": 147,
+        "y": 116,
+        "name": "conveyor_down",
+        "Storable": {
+            "storage": {
+                "coal": 0
+            }
+        }
+    },
+    {
+        "x": 147,
+        "y": 117,
+        "name": "conveyor_down",
+        "Storable": {
+            "storage": {
+                "coal": 0
+            }
+        }
+    },
+    {
+        "x": 147,
+        "y": 118,
+        "name": "conveyor_down",
+        "Storable": {
+            "storage": {
+                "coal": 0
+            }
+        }
+    },
+    {
+        "x": 147,
+        "y": 119,
+        "name": "conveyor_down",
+        "Storable": {
+            "storage": {
+                "coal": 0
+            }
+        }
+    },
+    {
+        "x": 147,
+        "y": 120,
+        "name": "conveyor_down",
+        "Storable": {
+            "storage": {
+                "coal": 0
+            }
+        }
+    },
+    {
+        "x": 147,
+        "y": 121,
+        "name": "conveyor_down",
+        "Storable": {
+            "storage": {
+                "coal": 0
+            }
+        }
+    },
+    {
+        "x": 147,
+        "y": 122,
+        "name": "conveyor_down",
+        "Storable": {
+            "storage": {
+                "coal": 0
+            }
+        }
+    },
+    {
+        "x": 150,
+        "y": 115,
+        "name": "conveyor_left",
+        "Storable": {
+            "storage": {
+                "coal": 0
+            }
+        }
+    },
+    {
+        "x": 149,
+        "y": 115,
+        "name": "conveyor_left",
+        "Storable": {
+            "storage": {
+                "coal": 0
+            }
+        }
+    },
+    {
+        "x": 148,
+        "y": 115,
+        "name": "conveyor_left",
+        "Storable": {
+            "storage": {
+                "coal": 0
+            }
+        }
+    },
+    {
+        "x": 147,
+        "y": 115,
+        "name": "conveyor_left",
+        "Storable": {
+            "storage": {
+                "coal": 0
+            }
+        }
+    },
+    {
+        "x": 146,
+        "y": 115,
+        "name": "conveyor_down",
+        "Storable": {
+            "storage": {
+                "coal": 0
+            }
+        }
+    },
+    {
+        "x": 146,
+        "y": 116,
+        "name": "conveyor_down",
+        "Storable": {
+            "storage": {
+                "coal": 0
+            }
+        }
+    },
+    {
+        "x": 146,
+        "y": 117,
+        "name": "conveyor_down",
+        "Storable": {
+            "storage": {
+                "coal": 0
+            }
+        }
+    },
+    {
+        "x": 146,
+        "y": 118,
+        "name": "conveyor_down",
+        "Storable": {
+            "storage": {
+                "coal": 0
+            }
+        }
+    },
+    {
+        "x": 146,
+        "y": 119,
+        "name": "conveyor_down",
+        "Storable": {
+            "storage": {
+                "coal": 0
+            }
+        }
+    },
+    {
+        "x": 146,
+        "y": 120,
+        "name": "conveyor_down",
+        "Storable": {
+            "storage": {
+                "coal": 0
+            }
+        }
+    },
+    {
+        "x": 146,
+        "y": 121,
+        "name": "conveyor_down",
+        "Storable": {
+            "storage": {
+                "coal": 0
+            }
+        }
+    },
+    {
+        "x": 146,
+        "y": 122,
+        "name": "conveyor_down",
+        "Storable": {
+            "storage": {
+                "coal": 0
+            }
+        }
+    },
+    {
+        "x": 151,
+        "y": 117,
+        "name": "conveyor_down",
+        "Storable": {
+            "storage": {}
+        }
+    },
+    {
+        "x": 151,
+        "y": 118,
+        "name": "conveyor_down",
+        "Storable": {
+            "storage": {}
+        }
+    },
+    {
+        "x": 151,
+        "y": 119,
+        "name": "conveyor_down",
+        "Storable": {
+            "storage": {
+                "coal": 0
+            }
+        }
+    },
+    {
+        "x": 151,
+        "y": 120,
+        "name": "conveyor_down",
+        "Storable": {
+            "storage": {
+                "coal": 0
+            }
+        }
+    },
+    {
+        "x": 151,
+        "y": 121,
+        "name": "conveyor_down",
+        "Storable": {
+            "storage": {
+                "coal": 0
+            }
+        }
+    },
+    {
+        "x": 151,
+        "y": 122,
+        "name": "conveyor_down",
+        "Storable": {
+            "storage": {
+                "coal": 0
+            }
+        }
+    },
+    {
+        "x": 151,
+        "y": 115,
+        "name": "drill",
+        "Storable": {
+            "storage": {}
+        },
+        "Switchable": {
+            "state": true
+        }
+    },
+    {
         "x": 146,
         "y": 123,
         "name": "base",
         "Storable": {
             "storage": {
-                "lead": 130,
-                "coal": 10
+                "coal": 674,
+                "lead": 66
             }
+        }
+    },
+    {
+        "x": 151,
+        "y": 123,
+        "name": "conveyor_down",
+        "Storable": {
+            "storage": {
+                "coal": 0
+            }
+        }
+    },
+    {
+        "x": 153,
+        "y": 125,
+        "name": "lead_2"
+    },
+    {
+        "x": 153,
+        "y": 124,
+        "name": "drill",
+        "Storable": {
+            "storage": {}
+        },
+        "Switchable": {
+            "state": false
         }
     }
 ]

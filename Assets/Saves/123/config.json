@@ -1,8 +1,10 @@
 {
-    "version": "LOW-LEVEL Alpha 0.0.2 Thermal-Mode",
-    "time": "[2026-09-22] 22:02",
-    "base_storage": {},
+    "version": "LOW-LEVEL Alpha 0.2.2 Thermal-Mode",
+    "time": "[2026-10-01] 23:48",
     "ambient": 20,
     "sizeX": 256,
-    "sizeY": 256
+    "sizeY": 256,
+    "opened": [],
+    "camX": 0,
+    "camY": 0
 }
